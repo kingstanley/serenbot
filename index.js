@@ -166,7 +166,7 @@ app.action('question1', async ({ body, ack, say }) => {
 app.action('question2', async ({ body, ack, say }) => {
  try {
    const answer = body.actions[0].selected_options.map(data => data.value);
-   const question="What are your favorite hobbies?",
+   const question = "What are your favorite hobbies?";
    const found = await Survey.findOne({ question: question, user_id: body.user.id });
    if (found) {
       await Survey.updateOne({_id:found.id},{
