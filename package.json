@@ -1,0 +1,31 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "A slack bot with nodejs for Serene",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kingstanley/serenbot.git"
+  },
+  "keywords": [
+    "Slack",
+    "Serene",
+    "Bot"
+  ],
+  "author": "Joel Stanley N",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kingstanley/serenbot/issues"
+  },
+  "homepage": "https://github.com/kingstanley/serenbot#readme",
+  "dependencies": {
+    "@slack/bolt": "^3.9.0",
+    "mongoose": "^6.2.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.0"
+  }
+}
