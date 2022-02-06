@@ -3,7 +3,7 @@ const { App } = require("@slack/bolt");
 const  mongoose = require("mongoose");
 const Survey = require('./survey');
 
-// curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
+ 
 
 const app = new App({
     token: 'xoxb-3039031695383-3086586058736-vZLd69Q4vUu3Ey4EhxM9tBeC', //Find in the Oauth  & Permissions tab
@@ -17,7 +17,8 @@ const port =process.env.PORT | 3000;
 const connection = mongoose.connect('mongodb+srv://kingstanley:Nj12063@cluster0.6noj5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
 app.command('/bot', async ({ command, ack, say }) => {
-  await ack();
+try {
+    await ack();
   say({
 	"blocks": [
 		
@@ -66,26 +67,15 @@ app.command('/bot', async ({ command, ack, say }) => {
 		}
 	]
 })
+} catch (error) {
+  console.log('Error@Bot command: ',error.message)
+}
 })
-
-app.command("/square", async ({ command, ack, say }) => {
-    try {
-      await ack();
-      let txt = command.text // The inputted parameters
-      if(isNaN(txt)) {
-          say(txt + " is not a number")
-      } else {
-          say(txt + " squared = " + (parseFloat(txt) * parseFloat(txt)))
-      }
-    } catch (error) {
-      console.log("err")
-      console.error(error.message);
-    }
-});
  
 
 app.action('question1', async ({ body, ack, say }) => {
-  await ack();
+  try {
+    await ack();
   console.log("Body: ", body.actions[0].selected_option);
 
   const survey = await Survey.create({
@@ -160,10 +150,14 @@ app.action('question1', async ({ body, ack, say }) => {
       }
     ]
   })
+  } catch (error) {
+    console.log("Error@Question1: ",error.message)
+  }
 });
 
 app.action('question2', async ({ body, ack, say }) => {
-  const answer = body.actions[0].selected_options.map(data =>data.value);
+ try {
+    const answer = body.actions[0].selected_options.map(data =>data.value);
   const survey = await Survey.create({
     question: "What are your favorite hobbies?",
     user_id: body.user.id,
@@ -173,6 +167,9 @@ app.action('question2', async ({ body, ack, say }) => {
   console.log("Saved survey: ", survey);
   await ack();
   await say('Thank You!')
+ } catch (error) {
+   console.log("Error@Question2: ",error.message)
+ }
 }
   )
 
