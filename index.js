@@ -17,6 +17,7 @@ const port =process.env.PORT | 3000;
 const connection = mongoose.connect('mongodb+srv://kingstanley:Nj12063@cluster0.6noj5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
 app.command('/bot', async ({ command, ack, say }) => {
+  console.log('command executed: ',command.text, ' ', command.user_name)
 try {
     await ack();
   say({
