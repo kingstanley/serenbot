@@ -17,8 +17,7 @@ const port =process.env.PORT | 3000;
 const connection = mongoose.connect('mongodb+srv://kingstanley:Nj12063@cluster0.6noj5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
 app.command('/bot', async ({ command, ack, say }) => {
-  console.log('command executed: ',command.text, ' ', command.user_name)
-try {
+  try {
     await ack();
   say({
 	"blocks": [
@@ -77,16 +76,24 @@ try {
 app.action('question1', async ({ body, ack, say }) => {
   try {
     await ack();
-  console.log("Body: ", body.actions[0].selected_option);
-
-  const survey = await Survey.create({
-    question: "Welcome. How are you doing?",
-    user_id: body.user.id,
-    username: body.user.name,
-    answer: [body.actions[0].selected_option.value]
-  });
-  console.log("Saved survey: ", survey);
-  // await say(`<@${body.user.id}> clicked the button`);
+      const question = "Welcome. How are you doing?";
+    const found = await Survey.findOne({ question, user_id: body.user.id });
+    if (found) {
+     await Survey.updateOne({_id:found.id},{
+        question: question,
+        user_id: body.user.id,
+        username: body.user.name,
+        answer: [body.actions[0].selected_option.value]
+      });
+    } else {
+      const survey = await Survey.create({
+        question: question,
+        user_id: body.user.id,
+        username: body.user.name,
+        answer: [body.actions[0].selected_option.value]
+      });
+    }
+  
   await say({
     "replace_original": "true",
     "blocks": [
@@ -158,14 +165,25 @@ app.action('question1', async ({ body, ack, say }) => {
 
 app.action('question2', async ({ body, ack, say }) => {
  try {
-    const answer = body.actions[0].selected_options.map(data =>data.value);
-  const survey = await Survey.create({
-    question: "What are your favorite hobbies?",
-    user_id: body.user.id,
-    username: body.user.name,
-    answer: answer
-  });
-  console.log("Saved survey: ", survey);
+   const answer = body.actions[0].selected_options.map(data => data.value);
+   const question="What are your favorite hobbies?",
+   const found = await Survey.findOne({ question: question, user_id: body.user.id });
+   if (found) {
+      await Survey.updateOne({_id:found.id},{
+       question: question,
+       user_id: body.user.id,
+       username: body.user.name,
+       answer: answer
+     });
+   } else {
+      await Survey.create({
+       question: question,
+       user_id: body.user.id,
+       username: body.user.name,
+       answer: answer
+     });
+   }
+  
   await ack();
   await say('Thank You!')
  } catch (error) {
