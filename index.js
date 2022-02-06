@@ -1,6 +1,6 @@
 
 const { App } = require("@slack/bolt");
-const { connect } = require("mongoose");
+const  mongoose = require("mongoose");
 const Survey = require('./survey');
 
 // curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
@@ -14,7 +14,7 @@ const app = new App({
 
 const port =process.env.PORT | 3000;
 
-const connection = connect('mongodb+srv://kingstanley:Nj12063@cluster0.6noj5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
+const connection = mongoose.connect('mongodb+srv://kingstanley:Nj12063@cluster0.6noj5.mongodb.net/myFirstDatabase?retryWrites=true&w=majority');
 
 app.command('/bot', async ({ command, ack, say }) => {
   await ack();
